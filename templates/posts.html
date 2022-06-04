@@ -1,4 +1,3 @@
-<!--  наследуемся от шаблона default.html, который мы создавали ещё во времена flatpages -->
 {% extends 'default.html' %}
 
 {% load custom_filters %}
@@ -7,11 +6,14 @@
 Posts
 {% endblock title %}
 
-<!-- В контенте на странице мы выводим все товары -->
 {% block content %}
 <h1>Все новости</h1>
 <p><strong>Всего новостей: {{posts|length}}</strong></p>
 <hr>
+<form action="{% url 'post_create' %}">
+    <input type="submit" value="Добавить новость" />
+</form>
+<br>
 <table>
     <tr>
         <td>
@@ -34,8 +36,34 @@ Posts
         </td>
         <td>
             {{post.post_text|truncatewords:10|censor:'***'}}
+            <a href="{% url 'post_delete' post.id %}"><u> Удалить </u></a>
+            &nbsp;
+            <a href="{% url 'post_update' post.id %}"><u> Редактировать </u></a>
         </td>
     </tr>
     {% endfor %}
 </table>
+<br>
+{% if is_paginated %}
+
+            {% if page_obj.has_previous %}
+                <a href="?page=1">First</a>
+                <a href="?page={{ page_obj.previous_page_number }}"><</a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <a>{{ num }}</a>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <a href="?page={{ num }}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">></a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+            {% endif %}
+{% endif %}
+<br>
+<br>
 {% endblock content %}
