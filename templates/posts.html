@@ -10,9 +10,15 @@ Posts
 <h1>Все новости</h1>
 <p><strong>Всего новостей: {{posts|length}}</strong></p>
 <hr>
+{% if is_not_author %}
+<form action="{% url 'upgrade' %}">
+    <input type="submit" value="Стать автором" />
+</form>
+{% else %}
 <form action="{% url 'post_create' %}">
     <input type="submit" value="Добавить новость" />
 </form>
+{% endif %}
 <br>
 <table>
     <tr>
