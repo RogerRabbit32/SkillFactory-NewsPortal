@@ -1,3 +1,4 @@
+import django.contrib.auth.models
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -27,6 +28,7 @@ class Author(models.Model):
 
 class Category(models.Model):
     category_name = models.CharField(max_length=64, unique=True)
+    subscriber = models.ManyToManyField(User, through='Subscribers')
 
     def __str__(self):
         return f'{self.category_name}'
@@ -87,3 +89,11 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'{self.comment_text}'
+
+
+class Subscribers(models.Model):
+    subscriber = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+
+

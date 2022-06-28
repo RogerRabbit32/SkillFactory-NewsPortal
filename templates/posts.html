@@ -19,6 +19,11 @@ Posts
     <input type="submit" value="Добавить новость" />
 </form>
 {% endif %}
+<p>
+<form action="{% url 'subscribe' %}">
+    <input type="submit" value="Подписаться на новости" />
+</form>
+</p>
 <br>
 <table>
     <tr>

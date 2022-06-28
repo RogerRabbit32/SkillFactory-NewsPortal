@@ -1,8 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic import ListView, DetailView, DeleteView, CreateView, UpdateView
-from .models import Post, Author
+from .models import Post, Author, Subscribers
 from .filters import PostFilter
-from .forms import PostForm, ProfileForm
+from .forms import PostForm, ProfileForm, SubscribeForm
 from django.shortcuts import redirect
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.decorators import login_required
@@ -80,3 +80,19 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView):
 
     def get_object(self, **kwargs):
         return self.request.user
+
+
+class Subscribe(LoginRequiredMixin, CreateView):
+    model = Subscribers
+    template_name = 'subscribe.html'
+    form_class = SubscribeForm
+    success_url = '/news/'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['prefix'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        form.instance.subscriber = self.request.user
+        return super().form_valid(form)

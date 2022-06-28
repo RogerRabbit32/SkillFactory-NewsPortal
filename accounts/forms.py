@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Post
+from .models import Post, Subscribers, Category
 from allauth.account.forms import SignupForm
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 class PostForm(ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'post_text', 'author']
+        fields = ['title', 'post_text', 'author', 'post_category']
 
 
 class BasicSignupForm(SignupForm):
@@ -28,4 +28,18 @@ class ProfileForm(ModelForm):
             'email',
             'first_name',
             'last_name',
+        ]
+
+
+class SubscribeForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.get('prefix')
+        super(SubscribeForm, self).__init__(*args, **kwargs)
+        self.fields['category'].queryset = Category.objects.exclude(subscriber=user.id)
+
+    class Meta:
+        model = Subscribers
+        fields = [
+            'category',
         ]
