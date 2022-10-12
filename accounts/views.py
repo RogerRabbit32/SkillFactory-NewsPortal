@@ -6,6 +6,7 @@ from .forms import PostForm, ProfileForm, SubscribeForm
 from django.shortcuts import redirect
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.decorators import login_required
+from .tasks import hello
 
 
 class PostList(ListView):
