@@ -7,6 +7,17 @@ from django.shortcuts import redirect
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
+from django.utils.translation import gettext as _
+from django.views import View
+from django.http import HttpRequest, HttpResponse
+from django.utils.translation import gettext as _
+
+
+class Index(View):
+    def get(self, request):
+        string = _('Hello world')
+
+        return HttpResponse(string)
 
 
 class PostList(ListView):
